@@ -1,151 +1,173 @@
-# Cyber Threat Intelligence (CTI) Dashboard
 
-A real-time threat intelligence platform that integrates with VirusTotal and AbuseIPDB APIs to verify and analyze Indicators of Compromise (IOCs).
+# Web Application Vulnerability Scanner
 
-## Features
-- Real-time IP and domain reputation checking
-- Integration with VirusTotal and AbuseIPDB APIs
-- Automated threat scoring (0-100 scale)
-- Threat categorization (Malware, Abuse, Suspicious, Clean)
-- Search history with SQLite database
-- Professional web-based dashboard interface
+A Python-based automated security testing tool that detects common web application vulnerabilities including SQL Injection, Cross-Site Scripting (XSS), and Cross-Site Request Forgery (CSRF). Built as part of cybersecurity internship project demonstrating practical penetration testing skills.
 
-## Technologies Used
-- Python 3.x
-- Flask (Web Framework)
-- SQLite (Database)
-- VirusTotal API v3
-- AbuseIPDB API v2
-- HTML/CSS/JavaScript
+## 🎯 Project Overview
 
-## Security Intelligence Features
-- **IOC Verification:** Check IPs and domains against global threat databases
-- **Multi-Source Analysis:** Combines data from VirusTotal and AbuseIPDB
-- **Threat Scoring:** Intelligent scoring algorithm based on multiple factors
-- **Historical Tracking:** Maintains search history for trend analysis
+This scanner automates the detection of OWASP Top 10 vulnerabilities by crawling web applications, identifying input vectors, and testing them with various attack payloads. It provides detailed reporting with severity levels and proof-of-concept evidence.
 
-## Installation
+## ✨ Features
 
-1. Clone the repository
+- **SQL Injection Detection**
+  - 9+ specialized injection payloads
+  - Error-based detection with regex pattern matching
+  - Tests for authentication bypass
+  - Identifies MySQL, PostgreSQL, MSSQL, and Oracle vulnerabilities
+
+- **Cross-Site Scripting (XSS) Detection**
+  - 8+ XSS payloads for reflected vulnerabilities
+  - JavaScript injection testing
+  - Event handler exploitation
+  - SVG and iframe-based attacks
+
+- **CSRF Vulnerability Detection**
+  - Validates presence of CSRF tokens
+  - Checks POST form security
+  - Identifies unprotected state-changing operations
+
+- **Automated Features**
+  - Intelligent form crawling using BeautifulSoup
+  - Automatic input field detection
+  - Real-time scan progress tracking
+  - SQLite database for scan history
+  - Web-based dashboard interface
+
+## 🛠️ Technologies Used
+
+- **Backend:** Python 3.x, Flask
+- **Web Scraping:** BeautifulSoup4, Requests
+- **Database:** SQLite
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Security Testing:** Custom payload injection engine
+
+## 📋 Requirements
+
+```txt
+flask==3.0.0
+flask-cors==4.0.0
+requests==2.31.0
+beautifulsoup4==4.12.0
+```
+
+## 🚀 Installation
+
+1. **Clone the repository**
 ```bash
-git clone https://github.com/nivas2104-hue/ElevateLabs_Project2.git
-cd ElevateLabs_Project2
+git clone https://github.com/nivas2104-hue/web-vulnerability-scanner.git
+cd web-vulnerability-scanner
 ```
 
-2. Install dependencies
+2. **Install dependencies**
 ```bash
-pip install flask flask-cors requests
+pip install -r requirements.txt
 ```
 
-3. Get API Keys
-- VirusTotal: https://www.virustotal.com/ (Free account)
-- AbuseIPDB: https://www.abuseipdb.com/ (Free account)
-
-4. Configure API keys
-Edit `app.py` and add your API keys:
-```python
-VIRUSTOTAL_API_KEY = "your_virustotal_key_here"
-ABUSEIPDB_API_KEY = "your_abuseipdb_key_here"
-```
-
-5. Run the application
+3. **Run the scanner**
 ```bash
-python app.py
+python vuln_scan.py
 ```
 
-6. Open browser and go to `http://localhost:5000`
+4. **Access the dashboard**
+Open your browser and navigate to: `http://localhost:5000`
 
-## Usage
+## 📖 Usage
 
-### Basic Workflow
-1. Select "IP Address" or "Domain" from dropdown
-2. Enter the IOC to check
-3. Click "Check Threat"
-4. View comprehensive threat analysis
+### ⚠️ Legal Disclaimer
+**ONLY scan websites you own or have explicit written permission to test. Unauthorized vulnerability scanning is illegal and unethical.**
 
-### Example Queries
-- **Clean IP:** `8.8.8.8` (Google DNS)
-- **Suspicious IP:** `185.220.101.3` (Tor exit node)
-- **Domain:** `google.com` (Clean)
+### Safe Testing Environments
 
-## API Integration
+Test the scanner on these intentionally vulnerable web applications:
 
-### VirusTotal
-- Checks against 70+ antivirus engines
-- Provides malware detection scores
-- Historical analysis data
+- **DVWA (Damn Vulnerable Web Application)**
+  - http://testphp.vulnweb.com
+  
+- **Altoro Mutual**
+  - http://demo.testfire.net
+  
+- **WebGoat / OWASP Broken Web Apps**
+  - http://zero.webappsecurity.com
 
-### AbuseIPDB
-- Reports abuse confidence score
-- Total abuse reports count
-- Last reported timestamp
-- Whitelisting status
+### Scanning Process
 
-## Threat Scoring Algorithm
+1. Enter the target URL in the search box
+2. Click **"Start Scan"**
+3. Wait for the scan to complete (typically 30-60 seconds)
+4. Review the detailed vulnerability report
+
+## 📊 Output Format
+
+### Scan Summary
 ```
-Final Threat Score = MAX(VirusTotal Score, AbuseIPDB Score)
-
-Categories:
-- 0-24: Clean
-- 25-49: Low Risk
-- 50-74: Medium Risk (Suspicious)
-- 75-100: High Risk (Malware/Abuse)
-```
-
-## Database Schema
-```sql
-CREATE TABLE searches (
-    id INTEGER PRIMARY KEY,
-    query TEXT,
-    search_type TEXT,
-    threat_score INTEGER,
-    is_malicious INTEGER,
-    vt_score INTEGER,
-    abuse_score INTEGER,
-    categories TEXT,
-    timestamp TEXT
-);
+Total Vulnerabilities: 7
+├─ SQL Injections: 3 (HIGH)
+├─ XSS: 3 (HIGH)
+└─ CSRF: 1 (MEDIUM)
 ```
 
-## Use Cases
-- **SOC Operations:** Quick IOC verification for incident response
-- **Threat Hunting:** Research suspicious IPs and domains
-- **Security Research:** Analyze threat actor infrastructure
-- **Network Monitoring:** Validate alerts from security tools
+### Detailed Report
+```
+⚠️ SQL Injection - HIGH SEVERITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+URL: http://testphp.vulnweb.com/login.php
+Parameter: username
+Payload: ' OR '1'='1'--
+Evidence: MySQL syntax error detected in response
+Recommendation: Use parameterized queries
+```
+
+## 🔍 Detection Methodology
+
+### SQL Injection
+- Injects specially crafted SQL payloads into input fields
+- Analyzes HTTP responses for database error messages
+- Uses regex patterns to match common SQL error strings
+- Tests for time-based blind SQL injection
+
+### Cross-Site Scripting (XSS)
+- Injects JavaScript payloads into form inputs
+- Checks if payload is reflected in HTTP response
+- Tests for script execution in various contexts
+- Validates input sanitization
+
+### CSRF
+- Examines form structure for anti-CSRF tokens
+- Identifies POST requests without protection
+- Checks for common token naming patterns
+
+## 📁 Project Structure
+
+```
+web-vulnerability-scanner/
+├── vuln_scan.py          # Main scanner application
+├── vuln_scanner.db       # SQLite database (auto-generated)
+├── README.md             # Project documentation
+```
+
+## 🎓 Learning Outcomes
+
+This project demonstrates:
+- Understanding of OWASP Top 10 vulnerabilities
+- Web application security testing methodology
+- Python web scraping and HTTP requests
+- Flask web framework development
+- Database design and SQL operations
+- Security-focused software development
+
+## 🔒 Security Best Practices
+
+This scanner is built for **educational and authorized testing only**. Key principles:
+- Never scan production systems without permission
+- Always obtain written authorization
+- Follow responsible disclosure practices
+- Respect rate limits and avoid DoS conditions
+- Store results securely
 
 
-# Python
-__pycache__/
-*.py[cod]
-*.so
-*.egg
-*.egg-info/
-*.pyc
 
-# Database
-*.db
-*.sqlite
-cti_dashboard.db
 
-# Environment
-.env
-venv/
-env/
 
-# API Keys (IMPORTANT!)
-*API_KEY*
-config.py
-secrets.py
+---
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
-*.log
-
-# OS
-.DS_Store
-Thumbs.db
+**Then tell me: DONE or need changes?** 🚀
